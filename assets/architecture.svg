@@ -1,0 +1,253 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1190" width="1500" height="1190" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif">
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4cc38a"/><stop offset="1" stop-color="#6cb2f5"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#8b98a9"/>
+    </marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#4cc38a"/>
+    </marker>
+  </defs>
+  <style>
+    .band  { fill:#12161d; stroke:#2a3442; stroke-width:1.5; rx:16; }
+    .box   { fill:#161b23; stroke:#3a4656; stroke-width:1.5; }
+    .boxhi { fill:#161b23; stroke:#4cc38a; stroke-width:1.8; }
+    .boxbl { fill:#161b23; stroke:#6cb2f5; stroke-width:1.8; }
+    .boxam { fill:#161b23; stroke:#e5b567; stroke-width:1.8; }
+    .h     { fill:#dce3ec; font-size:20px; font-weight:700; }
+    .bandlbl { fill:#4cc38a; font-size:14px; font-weight:700; letter-spacing:2.5px; }
+    .t     { fill:#dce3ec; font-size:15px; font-weight:600; }
+    .s     { fill:#8b98a9; font-size:12.5px; }
+    .mono  { fill:#6cb2f5; font-size:12.5px; font-family:ui-monospace, 'Cascadia Code', Menlo, monospace; }
+    .am    { fill:#e5b567; font-size:12.5px; }
+    .flow  { stroke:#8b98a9; stroke-width:2; fill:none; marker-end:url(#arrow); }
+    .flowG { stroke:#4cc38a; stroke-width:2.4; fill:none; marker-end:url(#arrowG); }
+    .dash  { stroke:#5a6views; }
+  </style>
+
+  <rect x="0" y="0" width="1500" height="1190" fill="#0e1116"/>
+
+  <!-- header -->
+  <g transform="translate(40,26)">
+    <rect x="0" y="0" width="46" height="46" rx="11" fill="#161b23" stroke="url(#brand)" stroke-width="2"/>
+    <path d="M10 15h26M10 23h26M10 31h26" stroke="#2a3442" stroke-width="2.4" stroke-linecap="round" transform="translate(0,4)"/>
+    <path d="M16 8v30M30 8v30" stroke="url(#brand)" stroke-width="2.8" stroke-linecap="round" transform="translate(0,4)"/>
+    <circle cx="16" cy="27" r="3.4" fill="#4cc38a"/><circle cx="30" cy="19" r="3.4" fill="#6cb2f5"/><circle cx="30" cy="35" r="3.4" fill="#6cb2f5"/>
+    <text x="60" y="31" class="h" font-size="26">Code<tspan fill="#4cc38a">Fabric</tspan></text>
+    <text x="222" y="31" class="s" font-size="14">— end-to-end workflow &amp; architecture</text>
+  </g>
+
+  <!-- ═══════════ BAND 1 : SOURCES ═══════════ -->
+  <rect x="40" y="90" width="1420" height="240" class="band" rx="16"/>
+  <text x="64" y="122" class="bandlbl">1 · SOURCES — WHAT GETS WOVEN IN</text>
+
+  <g transform="translate(70,140)">
+    <rect width="380" height="160" rx="12" class="boxhi"/>
+    <text x="20" y="32" class="t">💻 Local machine</text>
+    <text x="20" y="56" class="s">Any folder of code on the machine CodeFabric</text>
+    <text x="20" y="74" class="s">is deployed on — every project, every language.</text>
+    <rect x="20" y="92" width="340" height="30" rx="6" fill="#0a0d12" stroke="#2a3442"/>
+    <text x="32" y="112" class="mono">codefabric index /path/to/code</text>
+    <text x="20" y="145" class="s">Respects .gitignore · skips binaries &amp; vendors</text>
+  </g>
+
+  <g transform="translate(490,140)">
+    <rect width="440" height="160" rx="12" class="boxhi"/>
+    <text x="20" y="32" class="t">🐙 GitHub account — every repo you ever made</text>
+    <text x="20" y="56" class="s">Lists all repositories via the GitHub API (private ones</text>
+    <text x="20" y="74" class="s">too with a token), mirrors each as a tarball, incremental.</text>
+    <rect x="20" y="92" width="400" height="30" rx="6" fill="#0a0d12" stroke="#2a3442"/>
+    <text x="32" y="112" class="mono">export GITHUB_TOKEN=...  →  codefabric github sync</text>
+    <text x="20" y="145" class="s">No git binary needed · re-run any time, only changes download</text>
+  </g>
+
+  <g transform="translate(970,140)">
+    <rect width="460" height="160" rx="12" class="box"/>
+    <text x="20" y="32" class="t">🗂 Workspace mirror</text>
+    <text x="20" y="56" class="s">All synced repos land side by side in</text>
+    <text x="20" y="74" class="mono">~/codefabric-workspace/owner__repo/</text>
+    <text x="20" y="98" class="s">and are indexed as ONE fabric — a single search</text>
+    <text x="20" y="116" class="s">spans your entire account, cross-repo.</text>
+    <text x="20" y="143" class="am">federated account-wide search</text>
+  </g>
+  <path class="flowG" d="M930 220 h30"/>
+
+  <!-- band1 -> band2 -->
+  <path class="flowG" d="M750 330 v34"/>
+
+  <!-- ═══════════ BAND 2 : INDEXING ═══════════ -->
+  <rect x="40" y="368" width="1420" height="300" class="band"/>
+  <text x="64" y="400" class="bandlbl">2 · INDEXING PIPELINE — STRUCTURE-AWARE, INCREMENTAL</text>
+
+  <g transform="translate(70,420)">
+    <rect width="250" height="120" rx="12" class="box"/>
+    <text x="20" y="30" class="t">File walker</text>
+    <text x="20" y="54" class="s">Content-hash change detection:</text>
+    <text x="20" y="72" class="s">only modified files re-parse.</text>
+    <text x="20" y="96" class="am">re-index in milliseconds</text>
+  </g>
+  <path class="flow" d="M320 480 h34"/>
+
+  <g transform="translate(354,420)">
+    <rect width="300" height="120" rx="12" class="box"/>
+    <text x="20" y="30" class="t">AST chunkers (cAST)</text>
+    <text x="20" y="54" class="s">Python via stdlib ast · 13 languages via</text>
+    <text x="20" y="72" class="s">tree-sitter or brace-matching heuristics.</text>
+    <text x="20" y="96" class="s">Chunks never cut through a function.</text>
+  </g>
+  <path class="flow" d="M654 480 h34"/>
+
+  <g transform="translate(688,420)">
+    <rect width="240" height="120" rx="12" class="box"/>
+    <text x="20" y="30" class="t">Chunks + Symbols</text>
+    <text x="20" y="54" class="s">Functions, classes, methods,</text>
+    <text x="20" y="72" class="s">docstrings, signatures, calls,</text>
+    <text x="20" y="90" class="s">imports, inheritance.</text>
+  </g>
+
+  <path class="flow" d="M928 455 h40 v-8"/>
+  <path class="flow" d="M928 480 h40"/>
+  <path class="flow" d="M928 505 h40 v8"/>
+
+  <g transform="translate(968,412)">
+    <rect width="220" height="70" rx="10" class="boxbl"/>
+    <text x="16" y="27" class="t" font-size="14">🔤 BM25 index</text>
+    <text x="16" y="48" class="s">field-boosted keyword search</text>
+  </g>
+  <g transform="translate(968,489)">
+    <rect width="220" height="70" rx="10" class="boxbl"/>
+    <text x="16" y="27" class="t" font-size="14">🧭 Vector store</text>
+    <text x="16" y="48" class="s">offline hash or neural embeddings</text>
+  </g>
+  <g transform="translate(1210,412)">
+    <rect width="220" height="147" rx="10" class="boxbl"/>
+    <text x="16" y="27" class="t" font-size="14">🕸 Knowledge graph</text>
+    <text x="16" y="50" class="s">calls · inherits · imports ·</text>
+    <text x="16" y="68" class="s">contains — the fabric that</text>
+    <text x="16" y="86" class="s">answers "who calls this?"</text>
+    <text x="16" y="104" class="s">and "what breaks if it</text>
+    <text x="16" y="122" class="s">changes?"</text>
+  </g>
+  <path class="flow" d="M1188 447 h22"/>
+
+  <g transform="translate(70,570)">
+    <rect width="1360" height="70" rx="10" fill="#0f1319" stroke="#2a3442" stroke-dasharray="6 4"/>
+    <text x="20" y="30" class="t" font-size="14">💾 Persisted to <tspan class="mono">.codefabric/</tspan> as transparent JSON</text>
+    <text x="20" y="52" class="s">manifest.json · chunks.jsonl · symbols.jsonl · graph.json · bm25.json · vectors.json — inspectable, diffable, consumable by any tool</text>
+  </g>
+
+  <!-- band2 -> band3 -->
+  <path class="flowG" d="M750 668 v34"/>
+
+  <!-- ═══════════ BAND 3 : QUERY ═══════════ -->
+  <rect x="40" y="706" width="1420" height="210" class="band"/>
+  <text x="64" y="738" class="bandlbl">3 · HYBRID QUERY PIPELINE — EVERY SEARCH USES ALL THREE INDEXES</text>
+
+  <g transform="translate(70,758)">
+    <rect width="200" height="120" rx="12" class="box"/>
+    <text x="18" y="30" class="t" font-size="14">Query</text>
+    <text x="18" y="54" class="s">"where do we verify</text>
+    <text x="18" y="72" class="s">user passwords?"</text>
+    <text x="18" y="98" class="am">plain English or code</text>
+  </g>
+  <path class="flow" d="M270 818 h28"/>
+
+  <g transform="translate(298,758)">
+    <rect width="220" height="120" rx="12" class="box"/>
+    <text x="18" y="30" class="t" font-size="14">Code-aware tokenizer</text>
+    <text x="18" y="54" class="s">getUserById also matches</text>
+    <text x="18" y="72" class="s">"get user by id" — camelCase</text>
+    <text x="18" y="90" class="s">and snake_case split.</text>
+  </g>
+  <path class="flow" d="M518 793 h28 v-5"/>
+  <path class="flow" d="M518 843 h28 v5"/>
+
+  <g transform="translate(546,748)">
+    <rect width="180" height="60" rx="10" class="boxbl"/>
+    <text x="16" y="25" class="t" font-size="13.5">BM25 (sparse)</text>
+    <text x="16" y="45" class="s">exact identifiers win</text>
+  </g>
+  <g transform="translate(546,818)">
+    <rect width="180" height="60" rx="10" class="boxbl"/>
+    <text x="16" y="25" class="t" font-size="13.5">Dense (semantic)</text>
+    <text x="16" y="45" class="s">meaning-alike code wins</text>
+  </g>
+  <path class="flow" d="M726 778 h28 v25"/>
+  <path class="flow" d="M726 848 h28 v-25"/>
+
+  <g transform="translate(754,758)">
+    <rect width="200" height="120" rx="12" class="box"/>
+    <text x="18" y="30" class="t" font-size="14">Reciprocal Rank</text>
+    <text x="18" y="50" class="t" font-size="14">Fusion</text>
+    <text x="18" y="74" class="s">rank-based merge, no</text>
+    <text x="18" y="92" class="s">score calibration needed</text>
+  </g>
+  <path class="flow" d="M954 818 h28"/>
+
+  <g transform="translate(982,758)">
+    <rect width="220" height="120" rx="12" class="box"/>
+    <text x="18" y="30" class="t" font-size="14">Graph boost + context</text>
+    <text x="18" y="54" class="s">Connected hits promoted;</text>
+    <text x="18" y="72" class="s">each result carries callers,</text>
+    <text x="18" y="90" class="s">callees &amp; subclasses.</text>
+  </g>
+  <path class="flowG" d="M1202 818 h28"/>
+
+  <g transform="translate(1230,758)">
+    <rect width="200" height="120" rx="12" class="boxhi"/>
+    <text x="18" y="30" class="t" font-size="14">Ranked results</text>
+    <text x="18" y="54" class="s">file:line provenance +</text>
+    <text x="18" y="72" class="s">structural neighborhood,</text>
+    <text x="18" y="90" class="s">ready for humans or LLMs.</text>
+  </g>
+
+  <!-- band3 -> band4 -->
+  <path class="flowG" d="M750 916 v34"/>
+
+  <!-- ═══════════ BAND 4 : INTERFACES ═══════════ -->
+  <rect x="40" y="954" width="1420" height="206" class="band"/>
+  <text x="64" y="986" class="bandlbl">4 · INTERFACES — WITH AND WITHOUT AN LLM</text>
+
+  <g transform="translate(70,1006)">
+    <rect width="240" height="124" rx="12" class="box"/>
+    <text x="18" y="30" class="t" font-size="14">⌨️ CLI</text>
+    <text x="18" y="54" class="mono">search · symbol · callers</text>
+    <text x="18" y="72" class="mono">impact · outline · stats</text>
+    <text x="18" y="98" class="s">scriptable, JSON output</text>
+  </g>
+
+  <g transform="translate(330,1006)">
+    <rect width="240" height="124" rx="12" class="boxam"/>
+    <text x="18" y="30" class="t" font-size="14">🖥 Web UI — demo-ready</text>
+    <text x="18" y="54" class="mono">codefabric ui</text>
+    <text x="18" y="78" class="s">One command → local search</text>
+    <text x="18" y="96" class="s">console for friends &amp; colleagues.</text>
+  </g>
+
+  <g transform="translate(590,1006)">
+    <rect width="240" height="124" rx="12" class="box"/>
+    <text x="18" y="30" class="t" font-size="14">🤖 MCP server</text>
+    <text x="18" y="54" class="mono">codefabric mcp</text>
+    <text x="18" y="78" class="s">Plugs the fabric into Claude</text>
+    <text x="18" y="96" class="s">Code &amp; other AI agents.</text>
+  </g>
+
+  <g transform="translate(850,1006)">
+    <rect width="240" height="124" rx="12" class="box"/>
+    <text x="18" y="30" class="t" font-size="14">🐍 Python library</text>
+    <text x="18" y="54" class="mono">SearchEngine("/repo")</text>
+    <text x="18" y="78" class="s">Embed retrieval in your own</text>
+    <text x="18" y="96" class="s">apps and pipelines.</text>
+  </g>
+
+  <g transform="translate(1110,1006)">
+    <rect width="320" height="124" rx="12" class="boxam"/>
+    <text x="18" y="30" class="t" font-size="14">💬 Ask — <tspan class="am">codefabric ask "…"</tspan></text>
+    <text x="18" y="56" class="s">WITHOUT an LLM → extractive answers (top</text>
+    <text x="18" y="74" class="s">snippets, zero setup). WITH an LLM → cited,</text>
+    <text x="18" y="92" class="s">synthesized answers. Providers: Anthropic API,</text>
+    <text x="18" y="110" class="s">any OpenAI-compatible server, local Ollama.</text>
+  </g>
+</svg>

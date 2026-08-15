@@ -8,6 +8,9 @@
     codefabric outline FILE [--path P]
     codefabric stats [--path P]
     codefabric mcp [--path P]
+    codefabric github sync|list|search ...   (whole GitHub account)
+    codefabric ask "QUESTION" [--path P]     (with or without an LLM)
+    codefabric ui [--path P] [--port N]      (local demo web console)
 """
 from __future__ import annotations
 
@@ -126,6 +129,70 @@ def cmd_mcp(args: argparse.Namespace) -> None:
     serve(args.path)
 
 
+def cmd_github(args: argparse.Namespace) -> None:
+    from .github_sync import GitHubError, GitHubSync, resolve_workspace
+
+    workspace = resolve_workspace(args.workspace)
+    if args.gh_action == "search":
+        args.path = workspace
+        cmd_search(args)
+        return
+
+    try:
+        sync = GitHubSync(token=args.token, workspace=workspace)
+        if args.gh_action == "list":
+            for r in sync.list_repos(user=args.user,
+                                     include_forks=args.include_forks):
+                vis = "private" if r["private"] else "public "
+                print(f"{vis}  {r['full_name']}  (pushed {r['pushed_at']})")
+            return
+        # sync
+        stats = sync.sync(user=args.user, include_forks=args.include_forks)
+        print(f"synced {len(stats.synced)}, unchanged {len(stats.skipped)}, "
+              f"failed {len(stats.failed)}")
+        if not args.no_index:
+            print(f"indexing workspace {workspace} ...")
+            cfg = IndexConfig(embedder=args.embedder)
+            istats = Indexer(workspace, cfg).build()
+            print(f"indexed {istats.files_indexed} files -> {istats.chunks} "
+                  f"chunks, {istats.symbols} symbols in {istats.seconds}s")
+            print(f"\nnow try:  codefabric github search \"your query\"")
+            print(f"     or:  codefabric ui --path {workspace}")
+    except GitHubError as e:
+        print(f"error: {e}", file=sys.stderr)
+        raise SystemExit(2)
+
+
+def cmd_ask(args: argparse.Namespace) -> None:
+    from . import llm
+
+    engine = _engine(args.path)
+    try:
+        result = llm.ask(engine, args.question, k=args.k,
+                         provider=args.provider, model=args.model)
+    except llm.LLMUnavailable as e:
+        print(f"error: {e}", file=sys.stderr)
+        raise SystemExit(2)
+    if args.json:
+        print(json.dumps(result, indent=2))
+        return
+    print(result["answer"])
+    print(f"\n[{result['mode']}] sources:")
+    for s in result["sources"]:
+        sym = f"  {s['symbol']}" if s.get("symbol") else ""
+        print(f"  [{s['n']}] {s['file']}:{s['lines']}{sym}")
+
+
+def cmd_ui(args: argparse.Namespace) -> None:
+    from .webui import serve as serve_ui
+
+    try:
+        serve_ui(args.path, port=args.port, open_browser=not args.no_browser)
+    except FileNotFoundError as e:
+        print(str(e), file=sys.stderr)
+        raise SystemExit(2)
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="codefabric",
@@ -184,6 +251,60 @@ def build_parser() -> argparse.ArgumentParser:
     sp = sub.add_parser("mcp", help="serve tools over Model Context Protocol")
     add_path(sp)
     sp.set_defaults(func=cmd_mcp)
+
+    sp = sub.add_parser("github",
+                        help="sync + search every repo on a GitHub account")
+    gh = sp.add_subparsers(dest="gh_action", required=True)
+
+    def add_gh_common(gsp):
+        gsp.add_argument("--user", default=None,
+                         help="GitHub username (public repos; no token needed)")
+        gsp.add_argument("--token", default=None,
+                         help="token (default: env GITHUB_TOKEN)")
+        gsp.add_argument("--workspace", default=None,
+                         help="mirror directory (default: ~/codefabric-workspace)")
+        gsp.add_argument("--include-forks", action="store_true")
+
+    gsp = gh.add_parser("sync", help="mirror all repos and index them")
+    add_gh_common(gsp)
+    gsp.add_argument("--no-index", action="store_true",
+                     help="download only, skip indexing")
+    gsp.add_argument("--embedder", default="hash")
+    gsp.set_defaults(func=cmd_github)
+
+    gsp = gh.add_parser("list", help="list the repos that would be synced")
+    add_gh_common(gsp)
+    gsp.set_defaults(func=cmd_github)
+
+    gsp = gh.add_parser("search", help="search the synced workspace")
+    gsp.add_argument("query")
+    add_gh_common(gsp)
+    gsp.add_argument("--k", type=int, default=10)
+    gsp.add_argument("--lang", default=None)
+    gsp.add_argument("--kind", default=None)
+    gsp.add_argument("--no-dense", action="store_true")
+    gsp.add_argument("--json", action="store_true")
+    gsp.add_argument("--preview", type=int, default=4)
+    gsp.set_defaults(func=cmd_github)
+
+    sp = sub.add_parser("ask", help="answer a question about the code "
+                                    "(uses an LLM when configured, "
+                                    "extractive otherwise)")
+    sp.add_argument("question")
+    add_path(sp)
+    sp.add_argument("--k", type=int, default=8)
+    sp.add_argument("--provider", default="auto",
+                    choices=["auto", "none", "anthropic", "openai", "ollama"],
+                    help="'none' forces extractive mode (no LLM)")
+    sp.add_argument("--model", default=None)
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_ask)
+
+    sp = sub.add_parser("ui", help="launch the local web console")
+    add_path(sp)
+    sp.add_argument("--port", type=int, default=8377)
+    sp.add_argument("--no-browser", action="store_true")
+    sp.set_defaults(func=cmd_ui)
 
     return p
 
