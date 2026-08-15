@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codefabric"
+version = "0.1.0"
+description = "CodeFabric: an enhanced, structure-aware RAG knowledge fabric for codebases (hybrid retrieval + code knowledge graph)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "QualiZeal" }]
+keywords = ["rag", "code-search", "knowledge-graph", "mcp", "ast", "bm25"]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development",
+]
+# Core is dependency-free (pure stdlib) by design: it runs in any
+# environment, air-gapped included. Extras add optional power-ups,
+# all under permissive licenses (MIT / Apache-2.0 / BSD).
+dependencies = []
+
+[project.optional-dependencies]
+# Precise multi-language AST parsing (MIT-licensed grammars)
+ast = ["tree-sitter>=0.21", "tree-sitter-language-pack>=0.2"]
+# Neural embeddings + fast vector math (Apache-2.0 / BSD)
+ml = ["sentence-transformers>=2.6", "numpy>=1.24"]
+# Model Context Protocol server (MIT)
+mcp = ["mcp>=1.0"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+codefabric = "codefabric.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
