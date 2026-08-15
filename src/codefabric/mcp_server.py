@@ -5,9 +5,8 @@ Requires the ``mcp`` extra (MIT-licensed reference SDK):
     pip install codefabric[mcp]
     codefabric mcp --path /repo
 
-Registered tools mirror — and extend — the retrieval surface Serena
-offers, adding hybrid semantic search and impact analysis on top of
-symbol-level navigation.
+Registered tools give agents hybrid semantic search and impact
+analysis on top of symbol-level navigation.
 """
 from __future__ import annotations
 
